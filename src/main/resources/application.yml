@@ -1,0 +1,71 @@
+# 服务端口
+server:
+  port: 8080
+  servlet:
+    context-path: /web # 项目启动地址为 localhost:8080/web
+# 驱动配置信息
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+  # 全局格式化date
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  # 映射本地图片
+  mvc:
+    # 访问签注
+    static-path-pattern: /images/**
+  resources:
+    static-locations: file:F:\borrower\images\
+  servlet:
+    multipart:
+      # 上传文件总的最大值
+      max-request-size: 100MB
+      # 单个文件的最大值
+      max-file-size: 5MB
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/lzcf_hx?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 连接池的配置信息
+    druid:
+      initial-size: 5 # 初始化大小
+      min-idle: 5 # 初始化最小
+      max-active: 20 # 初始化最大
+      max-wait: 60000 # 配置获取连接等待超时的时间
+      time-between-eviction-runs-millis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      min-evictable-idle-time-millis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall,logback # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000 # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+
+# mybatis
+mybatis:
+  type-aliases-package: com.elementui.springboot.entity
+  mapper-locations: classpath:mapping/*.xml
+
+# mappers 多个接口时逗号隔开
+# mapper.mappers=tk.mybatis.mapper.common.Mapper
+mapper:
+  mappers: com.elementui.springboot.base.BaseMapper # 使用继承通用Mapper的全路径
+  not-empty: false
+  identity: MYSQL
+
+#pagehelper
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+logging:
+  config: classpath:logback.xml
